@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>WebAssembly Application</title>
+</head>
+<body>
+<div id="container">
+</div>
+<script>
+	let dx = 0;
+	let dy = 0;
+	let time = 0;
+    if ("WebAssembly" in window) {
+    	importObject = {
+		    env: {
+		        abort: () => console.log("Abort!")
+		      }
+		    };
+        WebAssembly.instantiateStreaming(fetch("ec.wasm"), importObject)
+            .then(result =>
+                document.getElementById("container").innerHTML =
+                    "Result: " + result.instance.exports._scalarMultiply(3, 7, 11, 0, 4, 20, dx, dy, time)
+            ).catch(console.error);
+    }
+</script>
+</body>
+</html>
