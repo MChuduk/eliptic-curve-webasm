@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Eliptic Curve Point Calculator</title>
+</head>
+<script async src="ec.js"></script>
+<script>
+	function calculate() {
+		let p = document.getElementById("value_p").value;
+		let a = document.getElementById("value_a").value;
+		let b = document.getElementById("value_b").value;
+		let gx = document.getElementById("value_gx").value;
+		let gy = document.getElementById("value_gy").value;
+		let k = document.getElementById("value_k").value;
+
+		Module.ccall('initCurve', null, ['string', 'string', 'string', 'string', 'string'], [a, b, p, "0", "0"]);
+
+		Module.ccall('multByScalar', null, ['string', 'string', 'string'], [gx, gy, k]);
+
+		let qx = Module.ccall('get_qx', 'string', null, null);
+		let qy = Module.ccall('get_qy', 'string', null, null);
+		let time = Module.ccall('get_time', 'number', null, null);
+
+		document.getElementById("value_qx").value = qx;
+		document.getElementById("value_qy").value = qy;
+		document.getElementById("value_time").value = time;
+	}
+</script>
+<style>
+	input {
+		margin: 10px 0 10px 0;
+	}
+</style>
+<body>
+	<input type="text" placeholder="p (hex)" size="80" id="value_p"><br>
+	<input type="text" placeholder="a (hex)" size="80" id="value_a"><br>
+	<input type="text" placeholder="b (hex)" size="80" id="value_b"><br><br>
+	<input type="text" placeholder="gx (hex)" size="80" id="value_gx"><br>
+	<input type="text" placeholder="gy (hex)" size="80" id="value_gy"><br>
+	<input type="text" placeholder="k (hex)" size="80" id="value_k"><br><br>
+	<input type="text" placeholder="qx (hex)" size="80" id="value_qx" readonly><br>
+	<input type="text" placeholder="qy (hex)" size="80" id="value_qy" readonly><br>
+	<input type="text" placeholder="time (sec)" size="80" id="value_time" readonly><br>
+	<button onclick="calculate()">Calculate</button>
+</body>
+</html>
